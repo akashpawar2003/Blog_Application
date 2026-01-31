@@ -41,7 +41,9 @@ const Update = () => {
     formData.append("title", title);
     formData.append("content", content);
     formData.append("category", category);
-    formData.append("blogImage", blogImage);
+    if (blogImage) {
+      formData.append("blogImage", blogImage);
+    }
 
     try {
       setLoading(true);

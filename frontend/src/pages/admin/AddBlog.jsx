@@ -10,6 +10,7 @@ const AddBlog = () => {
   const [category, setCategory] = useState("");
   const [blogImage, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [gloading, gsetLoading] = useState(false);
   const token = localStorage.getItem("token");
 
   const navigate = useNavigate();
@@ -20,12 +21,40 @@ const AddBlog = () => {
     setPreview(URL.createObjectURL(file));
   };
 
-  // title,category,content,blogImage,read_Time,status,isFeatured,user,comments
+  const generateContent = async () => {
+    try {
+      gsetLoading(true);
+      if(!title){
+        toast.error("title is required")
+        return
+      }
+      if(!category){
+        toast.error("category is required")
+        return
+      }
+      const res = await axios.post(
+        "http://localhost:5000/blog/generate/",
+        { prompt: title,category:category},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      setContent(res.data.data);
+      
+    } catch (error) {
+      toast.error(error.response?.data?.message);
+    } finally {
+      gsetLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!blogImage) {
-      toast.error("Please select Image");
+    if (!blogImage || !title || !content || !category) {
+      toast.error("All field Required");
       return;
     }
 
@@ -52,11 +81,11 @@ const AddBlog = () => {
       setCategory("");
       setImage(null);
       setPreview(null);
-      navigate('/profile/my-blogs')
+      navigate("/profile/my-blogs");
     } catch (error) {
       toast.error(error.response?.data?.message || "Upload failed");
     } finally {
-      setLoading(false);     
+      setLoading(false);
     }
   };
 
@@ -67,11 +96,11 @@ const AddBlog = () => {
       </h1>
 
       <Link
-          to="/blogs"
-          className="inline-block bg-red-600 text-white mb-4 px-4 sm:px-3 lg:px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
-        >
-          Go Back Home
-        </Link>
+        to="/profile"
+        className="inline-block bg-red-600 text-white mb-4 px-4 sm:px-3 lg:px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+      >
+        Go Back profile
+      </Link>
 
       <form
         onSubmit={handleSubmit}
@@ -111,9 +140,12 @@ const AddBlog = () => {
         <div className="mb-5">
           <label className="block text-gray-700 font-medium mb-2">
             Blog Description
+            <button disabled={gloading} onClick={generateContent} className="ml-3 cursor-pointer bg-red-600 text-white px-3 py-1.5 text-sm rounded-lg hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed transition">
+              {gloading ? "Generating..." : "Generate with AI ✨"}
+            </button>
           </label>
-          <textarea 
-            value={content}
+          <textarea
+            value={gloading ? "Waiting..." : (content)}
             onChange={(e) => setContent(e.target.value)}
             rows="3"
             placeholder="Write blog description..."

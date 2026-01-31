@@ -15,14 +15,18 @@ const ChangePassword = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.put("http://localhost:5000/user/change-password", {
-        oldPassword,
-        newPassword,
-      },{
+      const response = await axios.put(
+        "http://localhost:5000/user/change-password",
+        {
+          oldPassword,
+          newPassword,
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
+        },
+      );
       if (response.data.success) {
         toast.success(response.data.message);
         setNewPassword("");
@@ -43,7 +47,13 @@ const ChangePassword = () => {
       <Navbar />
       <div className="min-h-screen flex items-center justify-center mt-15 bg-red-50">
         <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
-          <h2 className="text-2xl font-bold text-center text-red-600 mb-6">
+          <Link
+            to="/profile"
+            className=" bg-red-600  text-white mb-4 px-4 sm:px-3 lg:px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+          >
+            Go Back Profile
+          </Link>
+          <h2 className="text-2xl mt-5 font-bold text-center text-red-600 mb-6">
             Change Password
           </h2>
 

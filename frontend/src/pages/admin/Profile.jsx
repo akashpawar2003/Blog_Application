@@ -18,14 +18,11 @@ const Profile = () => {
   const fetchUserData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        "http://localhost:5000/user/profile",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get("http://localhost:5000/user/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setUserData(response.data.data);
     } catch (err) {
       console.log(err);
@@ -61,7 +58,7 @@ const Profile = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       toast.success(response.data.message);
@@ -91,31 +88,58 @@ const Profile = () => {
     <div>
       <Navbar />
 
-      <div className="flex flex-wrap items-center justify-center mt-24 mb-5 ml-5 gap-3">
-        <Link to="/profile/my-blogs" className=" bg-red-600 text-white px-5 py-2 rounded-lg">
-          My Blogs
-        </Link>
-        <Link to="/profile/addblog" className=" bg-red-600 text-white px-5 py-2 rounded-lg">
-          Add Blog
-        </Link>
-        <Link to="/dashboard" className=" bg-red-600 text-white px-5 py-2 rounded-lg">
-          Dashboard
-        </Link>
-        <Link to="/profile/change-password" className=" bg-red-600 text-white px-5 py-2 rounded-lg">
-          Change Password
-        </Link>
-      </div>
-
-      <div className=" bg-gray-100 flex items-center justify-center px-4 py-10">
+      <div className=" bg-gray-100 flex items-center mt-7 justify-center px-4 py-10">
         <div className="bg-white w-full max-w-5xl rounded-xl shadow-lg p-6 md:p-10">
+          <div className="flex flex-wrap items-center justify-center mb-5 ml-5 gap-3">
+            <Link
+              to="/blogs"
+              className=" bg-red-600 text-white px-5 py-2 rounded-lg"
+            >
+              Blogs
+            </Link>
+            <Link
+              to="/profile/my-blogs"
+              className=" bg-red-600 text-white px-5 py-2 rounded-lg"
+            >
+              My Blogs
+            </Link>
+            <Link
+              to="/profile/addblog"
+              className=" bg-red-600 text-white px-5 py-2 rounded-lg"
+            >
+              Add Blog
+            </Link>
+            <Link
+              to="/profile/dashboard"
+              className=" bg-red-600 text-white px-5 py-2 rounded-lg"
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/profile/change-password"
+              className=" bg-red-600 text-white px-5 py-2 rounded-lg"
+            >
+              Change Password
+            </Link>
+          </div>
           <h2 className="text-2xl font-semibold mb-6">Profile Information</h2>
 
-          <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-10">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col md:flex-row gap-10"
+          >
             <div className="flex justify-center">
               <div className="relative">
                 {preview && (
                   <img
-                    src={preview}
+                    src={preview || "https://-icons-png.flaticon.com/512/149/149071.png"}
+                    alt="Profile"
+                    className="w-36 h-36 rounded-full object-cover border"
+                  />
+                )}
+                {!preview && (
+                  <img
+                    src={"https://cdn-icons-png.flaticon.com/512/149/149071.png"}
                     alt="Profile"
                     className="w-36 h-36 rounded-full object-cover border"
                   />
@@ -133,6 +157,9 @@ const Profile = () => {
             </div>
 
             <div className="flex-1 space-y-5">
+              <label className="block text-gray-700 font-medium mb-2">
+                Your Name
+              </label>
               <input
                 type="text"
                 value={name}
@@ -141,12 +168,19 @@ const Profile = () => {
                 className="w-full px-4 py-2 border rounded-md"
               />
 
+              <label className="block text-gray-700 font-medium mb-2">
+                Your Email
+              </label>
               <input
                 type="email"
                 value={email}
                 disabled
                 className="w-full px-4 py-2 border rounded-md bg-gray-100"
               />
+
+              <label className="block text-gray-700 font-medium mb-2">
+                Your Bio
+              </label>
 
               <textarea
                 value={bio}
@@ -155,6 +189,10 @@ const Profile = () => {
                 placeholder="Bio"
                 className="w-full px-4 py-2 border rounded-md"
               />
+
+              <label className="block text-gray-700 font-medium mb-2">
+                Your location
+              </label>
 
               <input
                 type="text"

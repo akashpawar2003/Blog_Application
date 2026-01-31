@@ -11,15 +11,9 @@ const SingleBlog = () => {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const token = localStorage.getItem("token");
-  const [liked, setLiked] = useState(false);
 
   const navigate = useNavigate();
-
   const { id } = useParams();
-
-  const handleToggle = () => {
-    setLiked(!liked);
-  };
 
   const submitHandler = async (e) => {
     setLoading(true);
@@ -73,6 +67,7 @@ const SingleBlog = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     fetchBlog();
     fetchComments();
@@ -81,47 +76,48 @@ const SingleBlog = () => {
   return (
     <>
       <Navbar />
-      <section className="bg-gray-50 min-h-screen mt-20 px-4 sm:px-6 lg:px-10 py-8">
+
+      <section className="bg-gray-50 min-h-screen mt-20 px-4 py-8">
         <Link
           to="/blogs"
           className="inline-block bg-red-600 text-white mb-4 px-4 sm:px-3 lg:px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
         >
-          Go Back Home
+          Go Back
         </Link>
-        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+
+        <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-sm overflow-hidden">
           <img
             src={blogs?.blogImage}
             alt="blog"
-            className="w-full h-56 sm:h-72 lg:h-80 object-cover"
+            className="w-full h-64 object-cover"
           />
 
           <div className="p-6 sm:p-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-red-600 mb-4">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-4">
               {blogs?.title}
             </h1>
 
-            <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="text-sm text-gray-500">
+                <p>{moment(blogs?.createdAt).format("DD MMM YYYY")}</p>
+                <p className="mt-1">By {blogs?.user?.name}</p>
+              </div>
+
+              <img
+                src={blogs?.user?.profile || "/user.png"}
+                alt="author"
+                className="w-12 h-12 rounded-full object-cover border"
+              />
+            </div>
+
+            <p className="text-gray-700 leading-relaxed whitespace-pre-line">
               {blogs?.content}
             </p>
-            <button
-              onClick={handleToggle}
-              className={`px-4 py-2 rounded-md border transition-colors duration-200 ${
-                liked
-                  ? "bg-red-600 text-white"
-                  : "bg-white text-red-600 border-red-600"
-              }`}
-            >
-              {liked ? "❤️" : " 🤍"}
-            </button>
-            <div className="flex flex-row text-gray-600 text-sm sm:text-base mt-1 line-clamp-3">
-              {moment(blogs?.createdAt).format("DD MMM YYYY")}{" "}
-              <div className="ml-140">by- {blogs?.user?.name}</div>
-            </div>
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto mt-8 bg-white rounded-xl shadow-md p-6 sm:p-8">
-          <h2 className="text-xl font-semibold text-red-600 mb-4">Comments</h2>
+        <div className="max-w-3xl mx-auto mt-8 bg-white rounded-xl shadow-sm p-6 sm:p-8">
+          <h2 className="text-xl font-semibold mb-4">Comments</h2>
 
           <form onSubmit={submitHandler} className="mb-6">
             <textarea
@@ -131,7 +127,7 @@ const SingleBlog = () => {
               className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
               rows="4"
             />
-            <button className="cursor-pointer mt-3 bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition">
+            <button className=" cursor-pointer mt-3 bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition">
               Post Comment
             </button>
           </form>
@@ -140,17 +136,28 @@ const SingleBlog = () => {
             {comments?.map((comment) => (
               <div
                 key={comment?._id}
-                className="border rounded-lg p-4 bg-gray-50"
+                className="border rounded-lg p-4 bg-gray-50 flex gap-3"
               >
-                <h4 className="font-semibold text-sm sm:text-base">
-                  {comment?.comment}
-                </h4>
-                <p className="text-gray-600 text-sm sm:text-base mt-1">
-                  {comment.userId.name}
-                </p>
-                <p className="text-gray-600 text-sm sm:text-base mt-1">
-                  {moment(comment?.userId.createdAt).format("DD MMM YYYY")}
-                </p>
+                <img
+                  src={
+                    comment?.userId?.profile ||
+                    "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                  }
+                  alt="user"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+
+                <div className="flex-1">
+                  <p className="font-medium">{comment?.comment}</p>
+
+                  <div className="text-sm text-gray-500 mt-2">
+                    <span>{comment?.userId?.name}</span>
+                    <span className="mx-2">•</span>
+                    <span>
+                      {moment(comment?.createdAt).format("DD MMM YYYY")}
+                    </span>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

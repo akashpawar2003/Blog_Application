@@ -1,4 +1,6 @@
 import User from "../models/User.js";
+import Blog from "../models/Blog.js";
+import Comment from "../models/Comment.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { uploadCloudinary } from "../middlewares/cloudiniary.js";
@@ -75,6 +77,29 @@ export const login = async (req, res) => {
   }
 };
 
+export const googleLogin = async (req, res) => {
+  try {
+    const { profile, email, name } = req.body;
+    let user = await User.findOne({ email });
+    if (!user) {
+      const password = Math.random().toString()
+      const hashPassword = await bcrypt.hash(password,10);
+      const newUser = new User({name,email,password:hashPassword,profile})
+
+      user = await newUser.save()
+      
+    }
+    const token = await jwt.sign({ id: user._id },process.env.SECRETEKEY,{expiresIn: "3d"});
+    return res.status(200).json({
+      success: true,
+      message: "Login Succesfully",
+      data: user,token
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export const update_Profile = async (req, res) => {
   try {
     const { name, bio, location } = req.body;
@@ -101,11 +126,10 @@ export const update_Profile = async (req, res) => {
       updateData.profilePublicId = uploadResult.public_id;
     }
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      updateData,
-      { new: true, runValidators: true }
-    );
+    const user = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+      runValidators: true,
+    });
 
     return res.status(200).json({
       success: true,
@@ -119,7 +143,6 @@ export const update_Profile = async (req, res) => {
     });
   }
 };
-
 
 export const getUser = async (req, res) => {
   try {
@@ -146,7 +169,7 @@ export const getUser = async (req, res) => {
 
 export const passwordChange = async (req, res) => {
   try {
-    const user = req?.user?._id
+    const user = req?.user?._id;
     const existUser = await User.findOne(user);
     if (!existUser) {
       return res
@@ -158,8 +181,11 @@ export const passwordChange = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "Old password Required" });
-    }    
-    const comparePassword = await bcrypt.compare(oldPassword, existUser.password);
+    }
+    const comparePassword = await bcrypt.compare(
+      oldPassword,
+      existUser.password,
+    );
     if (!comparePassword) {
       return res.status(401).json({
         success: false,
@@ -171,11 +197,11 @@ export const passwordChange = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "New password Required" });
-    } 
-    const hashPassword = await bcrypt.hash(newPassword,10);
+    }
+    const hashPassword = await bcrypt.hash(newPassword, 10);
 
     existUser.password = hashPassword;
-    await existUser.save()
+    await existUser.save();
     return res.status(200).json({
       success: true,
       message: "Password changed SuccesFully",
@@ -183,5 +209,24 @@ export const passwordChange = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const dashboard = async (req, res) => {
+  try {
+    const user = await User.countDocuments();
+    const blog = await Blog.countDocuments();
+    const comment = await Comment.countDocuments();
+
+    return res.status(200).json({
+      success: true,
+      message: "Data get SuccesFully",
+      data: { user, blog, comment },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };

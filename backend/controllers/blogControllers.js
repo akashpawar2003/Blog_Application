@@ -3,6 +3,7 @@ import express from "express";
 import { uploadCloudinary } from "../middlewares/cloudiniary.js";
 import Favourite from "../models/Favourite.js";
 import User from "../models/User.js";
+import main from "../middlewares/gemini.js";
 
 export const create_Blog = async (req, res) => {
   try {
@@ -41,23 +42,32 @@ export const create_Blog = async (req, res) => {
 export const update_Blog = async (req, res) => {
   try {
     const { id } = req.params;
-    const filePath = req.file.path;
-    const uploadResult = await uploadCloudinary(filePath);
-    const updateBlog = await Blog.findByIdAndUpdate(
+    const updateData = { ...req.body };
+    if (req.file) {
+      const filePath = req.file.path;
+      const uploadResult = await uploadCloudinary(filePath);
+      updateData.blogImage = uploadResult.url;
+    }
+    const updatedBlog = await Blog.findByIdAndUpdate(
       id,
-      { ...req.body, blogImage: uploadResult.url },
-      { new: true },
+      updateData,
+      { new: true }
     );
 
-    return res.status(201).json({
+    return res.status(200).json({
       success: true,
-      message: "Blog Update successfully",
-      data: updateBlog,
+      message: "Blog updated successfully",
+      data: updatedBlog,
     });
+
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
+
 
 export const delete_Blog = async (req, res) => {
   try {
@@ -222,6 +232,23 @@ export const getFavouriteBlogs = async (req, res) => {
       success: true,
       message:"Favourite Blogs",
       data: blogs,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const generateContent = async (req, res) => {
+  try {
+    const {prompt,category} =req.body;
+    const content = await main(prompt  + category +"its My category"  + "Generate a blog content for this title and category in simple 60 words only information about blogs")
+    return res.status(200).json({
+      success: true,
+      message: "Get Content by Chat Gpt",
+      data: content,
     });
   } catch (error) {
     return res.status(500).json({

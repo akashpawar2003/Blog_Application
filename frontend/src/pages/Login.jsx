@@ -2,25 +2,53 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import AuthContext from "../context/Auth"
+import AuthContext from "../context/Auth";
+import { auth, provider } from "../context/firebase"
+import { signInWithPopup  } from "firebase/auth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const {login,user} = useContext(AuthContext)
+  const [gloading, gsetLoading] = useState(false);
+  const { login, user } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const googleLogin = async () => {
+    setLoading(true);
+    try {
+      const googleResponse = await signInWithPopup(auth,provider)
+      const response = await axios.post("http://localhost:5000/user/google-login", {
+        email:googleResponse.user.email,
+        name:googleResponse.user.displayName,
+        profile:googleResponse.user.photoURL,
+      });
+      if (response.data.success) {
+        localStorage.setItem("token", response.data.token);
+        login(response.data.token);
+        toast.success(response.data.message);
+        navigate("/profile");
+      }
+    } catch (error) {
+      const message = error?.response?.data?.message;
+      console.log(error);
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    gsetLoading(true);
     try {
       const response = await axios.post("http://localhost:5000/user/login", {
         email,
         password,
       });
       if (response.data.success) {
-        localStorage.setItem("token",(response.data.token));
-        login(response.data.token)
+        localStorage.setItem("token", response.data.token);
+        login(response.data.token);
         toast.success(response.data.message);
         setEmail("");
         setPassword("");
@@ -28,10 +56,10 @@ const Login = () => {
       }
     } catch (error) {
       const message = error?.response?.data?.message;
-      console.log(error)
+      console.log(error);
       toast.error(message);
-    }finally{
-      setLoading(false)
+    } finally {
+      gsetLoading(false);
     }
   };
 
@@ -43,7 +71,19 @@ const Login = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-
+          <button
+          onClick={googleLogin}
+            type="button"
+            className=" cursor-pointer flex items-center justify-center gap-3 w-full border border-gray-300 rounded-lg px-4 py-2 bg-white text-gray-700 font-medium hover:bg-gray-50 transition"
+          >
+            <img
+              src="https://www.svgrepo.com/show/475656/google-color.svg"
+              alt="Google"
+              className="w-5 h-5"
+            />
+            {gloading ? "Please Wait..." : "Continue with Google"}
+          </button>
+          <hr className="text-gray-700" />
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email
@@ -78,7 +118,7 @@ const Login = () => {
             type="submit"
             className="w-full cursor-pointer bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold transition"
           >
-            {loading ? "Please Wait..." : "Login"} 
+            {loading ? "Please Wait..." : "Login"}
           </button>
         </form>
 
