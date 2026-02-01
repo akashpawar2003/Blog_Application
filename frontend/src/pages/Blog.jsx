@@ -53,21 +53,22 @@ const Blog = () => {
             onChange={(e) => setSearch(e.target.value)}
             className="w-[90%] md:w-[30%] p-2 border border-red-500 rounded-md focus:outline-none"
           />
-          <div className="flex flex-wrap w-[70%]flex-wrap gap-5 py-2">
-            {["All", "business", "technology", "travel", "fashion"].map(
-              (cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={"mt-auto cursor-pointer bg-red-600 text-white py-1 px-4 rounded-md hover:bg-red-700 transition"}
-                >
-                  {cat}
-                </button>
-              ),
-            )}
-          </div>
+          {["All","education","food", "business", "technology", "travel", "fashion"].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`mt-auto cursor-pointer py-1 px-4 rounded-md transition
+              ${
+                selectedCategory === cat
+                  ? "bg-white text-red-600 border border-red-600"
+                  : "bg-red-600 text-white hover:bg-red-700"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-red-600 text-center mb-10">
+        <h1 className="text-2xl sm:text-3xl mt-10 font-bold text-red-600 text-center mb-10">
           {!blogs ? "Blogs Are not created" : "All Blogs"}
         </h1>
 

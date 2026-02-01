@@ -104,6 +104,12 @@ const Profile = () => {
               My Blogs
             </Link>
             <Link
+              to="/profile/favourite"
+              className=" bg-red-600 text-white px-5 py-2 rounded-lg"
+            >
+              My Favourite Blogs
+            </Link>
+            <Link
               to="/profile/addblog"
               className=" bg-red-600 text-white px-5 py-2 rounded-lg"
             >

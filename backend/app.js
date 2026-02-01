@@ -7,6 +7,7 @@ import db from "./middlewares/db.js";
 dotenv.config();
 import { v2 as cloudinary } from "cloudinary";
 import commentRouter from "./routes/commentRoutes.js";
+import connectDB from "./middlewares/db.js";
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -29,5 +30,5 @@ app.get("/", (req, res) => {
 
 app.listen(process.env.PORT, () => {
   console.log(`server is listening on ${process.env.PORT}`);
-  db();
+  connectDB();
 });

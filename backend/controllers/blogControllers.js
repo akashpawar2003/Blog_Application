@@ -1,5 +1,4 @@
 import Blog from "../models/Blog.js";
-import express from "express";
 import { uploadCloudinary } from "../middlewares/cloudiniary.js";
 import Favourite from "../models/Favourite.js";
 import User from "../models/User.js";
@@ -8,20 +7,22 @@ import main from "../middlewares/gemini.js";
 export const create_Blog = async (req, res) => {
   try {
     const { title, content, category } = req.body;
+
     if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        message: "Image is required",
-      });
+      return res
+        .status(400)
+        .json({ success: false, message: "Image is required" });
     }
 
     const filePath = req.file.path;
     const uploadResult = await uploadCloudinary(filePath);
+
     if (!title || !content || !category) {
       return res
         .status(400)
         .json({ success: false, message: "All field Required" });
     }
+
     const newBlog = await Blog.create({
       title,
       content,
@@ -29,11 +30,13 @@ export const create_Blog = async (req, res) => {
       blogImage: uploadResult.url,
       user: req?.user?._id,
     });
-    return res.status(201).json({
-      success: true,
-      message: "Blog Created successfully",
-      data: newBlog,
-    });
+    return res
+      .status(201)
+      .json({
+        success: true,
+        message: "Blog Created successfully",
+        data: newBlog,
+      });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
@@ -43,23 +46,23 @@ export const update_Blog = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = { ...req.body };
+
     if (req.file) {
       const filePath = req.file.path;
       const uploadResult = await uploadCloudinary(filePath);
       updateData.blogImage = uploadResult.url;
     }
-    const updatedBlog = await Blog.findByIdAndUpdate(
-      id,
-      updateData,
-      { new: true }
-    );
-
-    return res.status(200).json({
-      success: true,
-      message: "Blog updated successfully",
-      data: updatedBlog,
+    const updatedBlog = await Blog.findByIdAndUpdate(id, updateData, {
+      new: true,
     });
 
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Blog updated successfully",
+        data: updatedBlog,
+      });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -68,10 +71,10 @@ export const update_Blog = async (req, res) => {
   }
 };
 
-
 export const delete_Blog = async (req, res) => {
   try {
     const { id } = req.params;
+
     if (!id) {
       return res
         .status(400)
@@ -195,11 +198,30 @@ export const addToFavourite = async (req, res) => {
       message = "Blog removed from favourites successfully";
       isFavourite = false;
     }
+    const favouriteCount = await Favourite.countDocuments({ blogId });
 
     return res.status(200).json({
       success: true,
       message,
-      data: isFavourite,
+      data: { isFavourite, favouriteCount },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const favouriteCount = async (req, res) => {
+  try {
+    const { blogId } = req.params;
+    const favouriteCount = await Favourite.countDocuments({ blogId });
+
+    return res.status(200).json({
+      success: true,
+      message: "Get Counts SuccesFully",
+      data: favouriteCount,
     });
   } catch (error) {
     return res.status(500).json({
@@ -220,7 +242,14 @@ export const getFavouriteBlogs = async (req, res) => {
       });
     }
 
-    const blogs = await Favourite.find({userId}).populate("blogId");
+    const blogs = await Favourite.find({ userId }).populate({
+      path: "blogId",
+      populate: {
+        path: "user",
+        model: "User",
+      },
+    });
+
     if (!blogs) {
       return res.status(404).json({
         success: false,
@@ -230,7 +259,7 @@ export const getFavouriteBlogs = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message:"Favourite Blogs",
+      message: "Favourite Blogs",
       data: blogs,
     });
   } catch (error) {
@@ -243,8 +272,13 @@ export const getFavouriteBlogs = async (req, res) => {
 
 export const generateContent = async (req, res) => {
   try {
-    const {prompt,category} =req.body;
-    const content = await main(prompt  + category +"its My category"  + "Generate a blog content for this title and category in simple 60 words only information about blogs")
+    const { prompt, category } = req.body;
+    const content = await main(
+      prompt +
+        category +
+        "its My category" +
+        "Generate a blog content about my title and category in simple 60 words only information and details"
+    );
     return res.status(200).json({
       success: true,
       message: "Get Content by Chat Gpt",
@@ -257,4 +291,3 @@ export const generateContent = async (req, res) => {
     });
   }
 };
-

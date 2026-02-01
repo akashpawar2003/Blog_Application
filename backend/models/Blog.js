@@ -17,16 +17,6 @@ const blogSchema = new mongoose.Schema(
     blogImage:{
       type:String,
     },
-    status: {
-      type: String,
-      enum: ["active","unactive"],
-      default:"active"
-    },
-    isFeatured: {
-      type: String,
-      enum: ["yes","no"],
-      default:"no"
-    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

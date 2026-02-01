@@ -12,7 +12,7 @@ const Navbar = () => {
     if (!window.confirm("Are you sure you want to LogOut?")) return;
     isLogout();
     navigate("/login");
-    toast.success("Logged out successfully");
+    toast.success("Logout successfully");
   };
   return (
     <nav className="w-full bg-white shadow-md fixed top-0 left-0 z-50">

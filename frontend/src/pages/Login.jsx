@@ -15,7 +15,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const googleLogin = async () => {
-    setLoading(true);
+    gsetLoading(true);
     try {
       const googleResponse = await signInWithPopup(auth,provider)
       const response = await axios.post("http://localhost:5000/user/google-login", {
@@ -34,13 +34,13 @@ const Login = () => {
       console.log(error);
       toast.error(message);
     } finally {
-      setLoading(false);
+      gsetLoading(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    gsetLoading(true);
+    setLoading(true);
     try {
       const response = await axios.post("http://localhost:5000/user/login", {
         email,
@@ -56,10 +56,9 @@ const Login = () => {
       }
     } catch (error) {
       const message = error?.response?.data?.message;
-      console.log(error);
       toast.error(message);
     } finally {
-      gsetLoading(false);
+      setLoading(false);
     }
   };
 

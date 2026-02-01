@@ -85,14 +85,12 @@ export const googleLogin = async (req, res) => {
       const password = Math.random().toString()
       const hashPassword = await bcrypt.hash(password,10);
       const newUser = new User({name,email,password:hashPassword,profile})
-
       user = await newUser.save()
-      
     }
     const token = await jwt.sign({ id: user._id },process.env.SECRETEKEY,{expiresIn: "3d"});
     return res.status(200).json({
       success: true,
-      message: "Login Succesfully",
+      message: "Welcome to Our Application",
       data: user,token
     });
   } catch (error) {

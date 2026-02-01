@@ -15,6 +15,7 @@ import AddBlog from "./pages/admin/AddBlog";
 import Update from "./pages/admin/Update";
 import Dashboard from "./pages/admin/Dashboard";
 import Home from "./pages/Home"
+import Favourite from "./pages/admin/Favourite";
 
 const App = () => {
   return (
@@ -55,6 +56,10 @@ const App = () => {
           <Route path="/profile/dashboard" element={
             <RequireAuth>
               <Dashboard />
+            </RequireAuth>} />
+          <Route path="/profile/favourite" element={
+            <RequireAuth>
+              <Favourite />
             </RequireAuth>} />
           <Route path="/*" element={<NotFound />} />         
         </Routes>

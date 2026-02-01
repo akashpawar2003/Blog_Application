@@ -4,25 +4,28 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import moment from "moment";
 import toast from "react-hot-toast";
+import { BsHeart } from "react-icons/bs";
+import { BsHeartFill } from "react-icons/bs";
 
 const SingleBlog = () => {
   const [loading, setLoading] = useState(false);
   const [blogs, setBlogs] = useState();
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
   const token = localStorage.getItem("token");
 
-  const navigate = useNavigate();
   const { id } = useParams();
 
   const submitHandler = async (e) => {
+    e.preventDefault();
     setLoading(true);
     if (!token) {
-      toast.error("You are not Login");
-      navigate("/login");
+      setComment("");
+      toast.error("You are not Login,Please login");
       return;
     }
-    e.preventDefault();
     try {
       const res = await axios.post(
         "http://localhost:5000/comment/add",
@@ -38,6 +41,54 @@ const SingleBlog = () => {
       fetchComments();
     } catch (error) {
       toast.error(error.response?.data?.message || "Upload failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLike = async () => {
+  if (!token) {
+    toast.error("You are not Login, Please Login");
+    return;
+  }
+
+  setLoading(true);
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/blog/favourite",
+      { blogId: id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const newLiked = res.data.data.isFavourite;
+
+    setLiked(newLiked);
+    setLikeCount(prev =>
+      newLiked ? prev + 1 : prev - 1
+    );
+
+    toast.success(res.data.message);
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Upload failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  const getLike = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/blog/favourite/count/${id}`,
+      );
+      setLikeCount(response.data.data);
+    } catch (error) {
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -71,6 +122,7 @@ const SingleBlog = () => {
   useEffect(() => {
     fetchBlog();
     fetchComments();
+    getLike();
   }, [id]);
 
   return (
@@ -127,9 +179,22 @@ const SingleBlog = () => {
               className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
               rows="4"
             />
-            <button className=" cursor-pointer mt-3 bg-red-600 text-white px-5 py-2 rounded hover:bg-red-700 transition">
-              Post Comment
-            </button>
+            <div className="flex flex-wrap justify-between">
+              <button className=" cursor-pointer mt-3 bg-red-600 mb-10 text-white px-5 py-2 rounded hover:bg-red-700 transition">
+                Post Comment
+              </button>
+              <div>
+                {!liked ? <BsHeart
+                  onClick={handleLike}
+                  className="mt-2 cursor-pointer h-10 w-10"
+                /> :
+                <BsHeartFill
+                  onClick={handleLike}
+                  className="mt-2 fill-red-700 cursor-pointer h-10 w-10"
+                />}
+                <p className="text-gray-700">{likeCount}</p>
+              </div>
+            </div>
           </form>
 
           <div className="space-y-4">
