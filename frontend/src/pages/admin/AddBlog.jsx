@@ -33,7 +33,7 @@ const AddBlog = () => {
         return
       }
       const res = await axios.post(
-        "http://localhost:5000/blog/generate/",
+        `${import.meta.env.VITE_BASE_URL}/blog/generate/`,
         { prompt: title,category:category},
         {
           headers: {
@@ -67,7 +67,7 @@ const AddBlog = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:5000/blog/create",
+        `${import.meta.env.VITE_BASE_URL}/blog/create`,
         formData,
         {
           headers: {

@@ -19,7 +19,7 @@ const Update = () => {
   const fetchBlog = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/blog/single/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/blog/single/${id}`,
       );
       setBlogs(response.data.data);
     } catch (error) {
@@ -48,7 +48,7 @@ const Update = () => {
     try {
       setLoading(true);
       const res = await axios.put(
-        `http://localhost:5000/blog/update/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/blog/update/${id}`,
         formData,
         {
           headers: {

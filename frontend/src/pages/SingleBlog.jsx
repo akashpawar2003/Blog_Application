@@ -28,7 +28,7 @@ const SingleBlog = () => {
     }
     try {
       const res = await axios.post(
-        "http://localhost:5000/comment/add",
+        `${import.meta.env.VITE_BASE_URL}/comment/add`,
         { blogId: id, comment },
         {
           headers: {
@@ -55,7 +55,7 @@ const SingleBlog = () => {
   setLoading(true);
   try {
     const res = await axios.post(
-      "http://localhost:5000/blog/favourite",
+      `${import.meta.env.VITE_BASE_URL}/blog/favourite`,
       { blogId: id },
       {
         headers: {
@@ -84,7 +84,7 @@ const SingleBlog = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/blog/favourite/count/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/blog/favourite/count/${id}`,
       );
       setLikeCount(response.data.data);
     } catch (error) {
@@ -98,7 +98,7 @@ const SingleBlog = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/blog/single/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/blog/single/${id}`,
       );
       setBlogs(response.data.data);
     } catch (error) {
@@ -111,7 +111,7 @@ const SingleBlog = () => {
   const fetchComments = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/comment/get/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/comment/get/${id}`,
       );
       setComments(response.data.data);
     } catch (error) {

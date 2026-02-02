@@ -3,7 +3,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import userRouter from "./routes/userRoutes.js";
 import blogRouter from "./routes/blogRoutes.js";
-import db from "./middlewares/db.js";
 dotenv.config();
 import { v2 as cloudinary } from "cloudinary";
 import commentRouter from "./routes/commentRoutes.js";
@@ -19,7 +18,12 @@ const app = express();
 app.use(express.json());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use("/user", userRouter);
 app.use("/blog", blogRouter);
 app.use("/comment", commentRouter);

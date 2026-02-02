@@ -14,7 +14,7 @@ const Blog = () => {
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/blog/allblogs");
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/blog/allblogs`);
       if (response.data.success) {
         setBlogs(response?.data.data);
       }

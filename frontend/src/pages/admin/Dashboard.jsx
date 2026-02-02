@@ -8,7 +8,7 @@ const Dashboard = () => {
   const [data, setData] = useState("")
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/user/dashboard", {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/user/dashboard`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -9,20 +9,24 @@ const MyBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const {id} = useParams();
+  const { id } = useParams();
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/blog/myblogs",{
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/blog/myblogs`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
-          }
-        });
+          },
+        },
+      );
       if (response.data.success) {
         setBlogs(response.data.data);
       }
     } catch (error) {
       const message = error?.response?.data?.message;
+      toast.error(message);
     }
   };
 
@@ -31,12 +35,13 @@ const MyBlogs = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:5000/blog/delete/${id}`
-      ,{
+        `${import.meta.env.VITE_BASE_URL}/${id}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
-          }
-        })
+          },
+        },
+      );
 
       if (response.data.success) {
         toast.success("Blog deleted successfully");
@@ -54,17 +59,17 @@ const MyBlogs = () => {
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <section className="mt-15 cursor-pointer bg-gray-50 min-h-screen px-4  sm:px-6 lg:px-10 py-10">
         <h1 className="text-2xl sm:text-3xl font-bold text-red-600 text-center mb-10">
-          {blogs.length==0 ? "You are not created Blogs" : "My Blogs"}
+          {blogs.length == 0 ? "You are not created Blogs" : "My Blogs"}
         </h1>
         <Link
           to="/profile"
           className="inline-block bg-red-600 text-white mb-4 px-4 sm:px-3 lg:px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
         >
           Go Back Profile
-      </Link>
+        </Link>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
           {blogs?.map((blog) => (
@@ -87,7 +92,6 @@ const MyBlogs = () => {
                 <p className="text-gray-600 text-sm sm:text-base mb-4 line-clamp-3">
                   {blog.content}
                 </p>
-
 
                 <div className="mt-auto flex gap-2">
                   <button
