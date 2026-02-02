@@ -57,7 +57,7 @@ const Blog = () => {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`mt-auto cursor-pointer py-1 px-4 rounded-md transition
+              className={`px-5 py-2 rounded-lg cursor-pointer
               ${
                 selectedCategory === cat
                   ? "bg-white text-red-600 border border-red-600"

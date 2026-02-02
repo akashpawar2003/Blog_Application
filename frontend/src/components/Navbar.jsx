@@ -23,14 +23,14 @@ const Navbar = () => {
 
         <div className="flex flex-row gap-2">
           {!isLogin() && (
-            <button className="px-2 py-1 bg-red-600 text-whiterounded-lg hover:bg-red-700 cursor-pointer">
+            <button className="bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 cursor-pointer">
               <Link to="/login">Login</Link>
             </button>
           )}
           {!isProfilePage && isLogin() && (
             <button
               onClick={() => navigate("/profile")}
-              className=" bg-red-600 text-white px-2 py-1 rounded-lg hover:bg-red-700 cursor-pointer"
+              className=" bg-red-600 text-white px-5 py-2 rounded-lg hover:bg-red-700 cursor-pointer"
             >
               Account
             </button>
