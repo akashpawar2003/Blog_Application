@@ -62,7 +62,7 @@ export const login = async (req, res) => {
       { id: existUser._id },
       process.env.SECRETEKEY,
       {
-        expiresIn: "3d",
+        expiresIn: "365d",
       },
     );
     await User.findByIdAndUpdate(existUser._id, { token }, { new: true });
