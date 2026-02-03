@@ -20,10 +20,14 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   origin: 'blog-application-alpha-taupe.vercel.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
+
 app.use("/user", userRouter);
 app.use("/blog", blogRouter);
 app.use("/comment", commentRouter);
@@ -32,7 +36,7 @@ app.get("/", (req, res) => {
   res.send(`routing is working ${1000 * 20}`);
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`server is listening on ${process.env.PORT}`);
-  connectDB();
-});
+// app.listen(process.env.PORT, () => {
+//   console.log(`server is listening on ${process.env.PORT}`);
+//   connectDB();
+// });
