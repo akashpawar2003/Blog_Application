@@ -117,8 +117,7 @@ export const update_Profile = async (req, res) => {
     };
 
     if (req.file) {
-      const filePath = req.file.path;
-      const uploadResult = await uploadCloudinary(filePath);
+      const uploadResult = await uploadCloudinary(req.file.buffer);
 
       updateData.profile = uploadResult.url;
       updateData.profilePublicId = uploadResult.public_id;

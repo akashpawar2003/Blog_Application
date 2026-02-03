@@ -14,8 +14,7 @@ export const create_Blog = async (req, res) => {
         .json({ success: false, message: "Image is required" });
     }
 
-    const filePath = req.file.path;
-    const uploadResult = await uploadCloudinary(filePath);
+    const uploadResult = await uploadCloudinary(req.file.buffer);
 
     if (!title || !content || !category) {
       return res
@@ -48,8 +47,7 @@ export const update_Blog = async (req, res) => {
     const updateData = { ...req.body };
 
     if (req.file) {
-      const filePath = req.file.path;
-      const uploadResult = await uploadCloudinary(filePath);
+      const uploadResult = await uploadCloudinary(req.file.buffer);
       updateData.blogImage = uploadResult.url;
     }
     const updatedBlog = await Blog.findByIdAndUpdate(id, updateData, {
