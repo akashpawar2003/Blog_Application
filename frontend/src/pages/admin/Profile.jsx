@@ -18,7 +18,7 @@ const Profile = () => {
   const fetchUserData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/user/profile`, {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/user/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -52,7 +52,7 @@ const Profile = () => {
       }
 
       const response = await axios.put(
-        `${import.meta.env.VITE_BASE_URL}/user/update/profile`,
+        `${import.meta.env.VITE_BASE_URL}/api/user/update/profile`,
         formData,
         {
           headers: {

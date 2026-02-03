@@ -19,7 +19,7 @@ const Update = () => {
   const fetchBlog = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/blog/single/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/blog/single/${id}`,
       );
       setBlogs(response.data.data);
     } catch (error) {
@@ -48,7 +48,7 @@ const Update = () => {
     try {
       setLoading(true);
       const res = await axios.put(
-        `${import.meta.env.VITE_BASE_URL}/blog/update/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/blog/update/${id}`,
         formData,
         {
           headers: {

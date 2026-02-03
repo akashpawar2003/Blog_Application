@@ -21,7 +21,7 @@ const Register = () => {
     try {
       const googleResponse = await signInWithPopup(auth, provider);
       const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/user/google-login`,
+        `${import.meta.env.VITE_BASE_URL}/api/user/google-login`,
         {
           email: googleResponse.user.email,
           name: googleResponse.user.displayName,
@@ -47,7 +47,7 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`, {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/user/register`, {
         name,
         email,
         password,

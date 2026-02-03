@@ -14,7 +14,7 @@ const MyBlogs = () => {
   const fetchBlogs = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/blog/myblogs`,
+        `${import.meta.env.VITE_BASE_URL}/api/blog/myblogs`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -35,7 +35,7 @@ const MyBlogs = () => {
 
     try {
       const response = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

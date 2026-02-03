@@ -18,7 +18,7 @@ const Login = () => {
     gsetLoading(true);
     try {
       const googleResponse = await signInWithPopup(auth,provider)
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/google-login`, {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/user/google-login`, {
         email:googleResponse.user.email,
         name:googleResponse.user.displayName,
         profile:googleResponse.user.photoURL,
@@ -42,7 +42,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/user/login`, {
         email,
         password,
       });

@@ -28,16 +28,15 @@ app.use(
     credentials: true
   })
 );
-
-
+// app.options("*", cors());
 app.use(async (req, res, next) => {
   await connectDB();
   next();
 });
 
-app.use("/user", userRouter);
-app.use("/blog", blogRouter);
-app.use("/comment", commentRouter);
+app.use("/api/user", userRouter);
+app.use("/api/blog", blogRouter);
+app.use("/api/comment", commentRouter);
 
 app.get("/", (req, res) => {
   res.send(`routing is working ${1000 * 20}`);

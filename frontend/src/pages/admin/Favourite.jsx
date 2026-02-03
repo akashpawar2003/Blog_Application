@@ -12,7 +12,7 @@ const Favourite = () => {
   const fetchBlogs = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/blog/favourite/blogs`,
+        `${import.meta.env.VITE_BASE_URL}/api/blog/favourite/blogs`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
