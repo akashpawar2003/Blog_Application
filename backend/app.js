@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://blog-application-beryl-nu.vercel.app"
+      "https://blog-application-git-main-akashs-projects-83aa19fc.vercel.app"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
