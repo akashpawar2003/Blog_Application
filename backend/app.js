@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://your-frontend.vercel.app"
+      "https://blog-application-beryl-nu.vercel.app"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
@@ -43,7 +43,8 @@ app.get("/", (req, res) => {
   res.send(`routing is working ${1000 * 20}`);
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`server is listening on ${process.env.PORT}`);
-  connectDB();
-});
+// app.listen(process.env.PORT, () => {
+//   console.log(`server is listening on ${process.env.PORT}`);
+//   connectDB();
+// });
+export default app;
