@@ -18,10 +18,17 @@ const app = express();
 app.use(express.json());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: 'blog-application-alpha-taupe.vercel.app',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://your-frontend.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+  })
+);
+
 
 app.use(async (req, res, next) => {
   await connectDB();
@@ -36,7 +43,7 @@ app.get("/", (req, res) => {
   res.send(`routing is working ${1000 * 20}`);
 });
 
-// app.listen(process.env.PORT, () => {
-//   console.log(`server is listening on ${process.env.PORT}`);
-//   connectDB();
-// });
+app.listen(process.env.PORT, () => {
+  console.log(`server is listening on ${process.env.PORT}`);
+  connectDB();
+});
