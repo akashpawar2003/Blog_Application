@@ -28,7 +28,7 @@ app.use(
     credentials: true
   })
 );
-app.use(cors({ origin: "*" }));
+
 app.use(async (req, res, next) => {
   await connectDB();
   next();
@@ -42,8 +42,8 @@ app.get("/", (req, res) => {
   res.send(`routing is working ${1000 * 20}`);
 });
 
-// app.listen(process.env.PORT, () => {
-//   console.log(`server is listening on ${process.env.PORT}`);
-//   connectDB();
-// });
+app.listen(process.env.PORT, () => {
+  console.log(`server is listening on ${process.env.PORT}`);
+  connectDB();
+});
 export default app;
