@@ -35,7 +35,7 @@ const MyBlogs = () => {
 
     try {
       const response = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}/api/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/api/blog/delete/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
