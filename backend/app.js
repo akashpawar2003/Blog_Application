@@ -28,7 +28,7 @@ app.use(
     credentials: true
   })
 );
-// app.options("*", cors());
+app.use(cors({ origin: "*" }));
 app.use(async (req, res, next) => {
   await connectDB();
   next();
