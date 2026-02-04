@@ -1,5 +1,5 @@
 # Full Stack Blog_Application 
-## [Live Demo]([(https://blog-application-frontend-4b6k.onrender.com])
+## [Live Demo](https://blog-application-frontend-4b6k.onrender.com)
 # Features
 - Developed a full-stack MERN blog application with secure authentication using Firebase Google OAuth.
 - Used React, Node.js, Express.js, and MongoDB technology to build this application.
