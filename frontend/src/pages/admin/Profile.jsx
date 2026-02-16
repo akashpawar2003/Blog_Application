@@ -88,7 +88,7 @@ const Profile = () => {
     <div>
       <Navbar />
 
-      <div className=" bg-gray-100 flex items-center mt-7 justify-center px-4 py-10">
+      <div className=" bg-gray-100 flex items-center mt-12 justify-center px-4 py-10">
         <div className="bg-white w-full max-w-5xl rounded-xl shadow-lg p-6 md:p-10">
           <div className="flex flex-wrap items-center justify-center mb-5 ml-5 gap-3">
             <Link

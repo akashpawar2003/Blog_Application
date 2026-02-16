@@ -6,7 +6,7 @@ const Home = () => {
   const { isLogin } = useContext(AuthContext);
   return (
     <>
-      <section className="w-full bg-gray-50 py-20 px-6 mt-15 md:px-16">
+      <section className="w-full bg-gray-50 py-20 px-6 md:px-16">
         <div className="max-w-6xl mx-auto text-center space-y-6">
           <span className="inline-flex items-center gap-2 px-4 py-1 mb-6 text-sm font-medium text-red-600 bg-red-100 rounded-full">
             🚀 New AI feature integrated
@@ -40,12 +40,12 @@ const Home = () => {
             <h3 className="text-xl font-bold text-gray-800 mb-2">
               Why BlogApp?
             </h3>
-            <p className="text-gray-700">
+            <div className="text-gray-700">
               <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto">
                 Discover trending blogs, read meaningful stories, explore new
                 topics, and stay updated with fresh articles written by me.
               </p>
-            </p>
+            </div>
           </div>
         </div>
       </section>

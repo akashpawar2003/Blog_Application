@@ -20,7 +20,7 @@ const Favourite = () => {
         },
       );
       if (response.data.success) {
-        setBlogs(response.data.data);
+        setBlogs(response?.data?.data);
       }
     } catch (error) {
       const message = error?.response?.data?.message;
@@ -46,26 +46,27 @@ const Favourite = () => {
         </Link>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-          {blogs.length === 0 && (
+          {blogs?.length === 0 && (
             <p className="text-gray-text-2xl sm:text-3xl font-bold text-red-600 text-center mb-10">
               No blogs found
             </p>
           )}
+          
           {blogs?.map((blog) => (
             <div
-              key={blog.blogId._id}
+              key={blog?.blogId?._id}
               className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 flex flex-col"
             >
               <img
-                src={blog.blogId.blogImage}
-                alt={blog.blogId.title}
+                src={blog?.blogId?.blogImage}
+                alt={blog?.blogId?.title}
                 className="h-48 sm:h-44 lg:h-48 w-full object-cover rounded-t-xl"
               />
 
               <div className="p-5 flex flex-col flex-grow">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <h2 className="text-lg sm:text-xl font-semibold">
-                    {blog.blogId.title}
+                    {blog?.blogId?.title}
                   </h2>
 
                   <img
@@ -79,7 +80,7 @@ const Favourite = () => {
                 </div>
 
                 <p className="text-gray-600 text-sm sm:text-base mb-4 line-clamp-3">
-                  {blog.blogId.content}
+                  {blog?.blogId?.content}
                 </p>
 
                 <button
@@ -90,8 +91,8 @@ const Favourite = () => {
                 </button>
 
                 <div className="flex justify-between items-center mt-2 text-gray-600 text-sm">
-                  <p>{moment(blog.blogId.createdAt).format("DD MMM YYYY")}</p>
-                  <p>Author - {blog.blogId?.user?.name}</p>
+                  <p>{moment(blog?.blogId?.createdAt).format("DD MMM YYYY")}</p>
+                  <p>Author - {blog?.blogId?.user?.name}</p>
                 </div>
               </div>
             </div>

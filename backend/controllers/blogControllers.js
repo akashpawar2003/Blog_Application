@@ -2,6 +2,7 @@ import Blog from "../models/Blog.js";
 import { uploadCloudinary } from "../middlewares/cloudiniary.js";
 import Favourite from "../models/Favourite.js";
 import User from "../models/User.js";
+import Comment from "../models/Comment.js";
 import main from "../middlewares/gemini.js";
 
 export const create_Blog = async (req, res) => {
@@ -78,6 +79,8 @@ export const delete_Blog = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Blog not Found" });
     }
+    await Favourite.deleteMany({ blogId: id });
+    await Comment.deleteMany({ blogId: id });
     await Blog.findByIdAndDelete(id);
     return res.status(201).json({
       success: true,
@@ -107,6 +110,8 @@ export const all_Blog = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
 
 export const get_Blog = async (req, res) => {
   try {

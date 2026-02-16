@@ -7,6 +7,7 @@ dotenv.config();
 import { v2 as cloudinary } from "cloudinary";
 import commentRouter from "./routes/commentRoutes.js";
 import connectDB from "./middlewares/db.js";
+import path from "path";
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -15,6 +16,11 @@ cloudinary.config({
 });
 const app = express();
 
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "/frontend/dist"))); 
+
+
+
 app.use(express.json());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
@@ -22,7 +28,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "blog-application-frontend-omega.vercel.app"
+      "https://blog-application-m205.onrender.com"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
@@ -32,6 +38,11 @@ app.use(
 app.use(async (req, res, next) => {
   await connectDB();
   next();
+});
+
+app.use(express.static(path.join(__dirname, "frontend", "dist")));
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
 
 app.use("/api/user", userRouter);
