@@ -28,7 +28,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://blog-application-m205.onrender.com"
+      "https://blog-application-frontend-4b6k.onrender.com"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
